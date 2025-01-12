@@ -1,0 +1,51 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependências
+node_modules/
+
+# Builds
+dist/
+build/
+
+# Produção
+.env
+.env.*.local
+
+# Cache do Node.js
+.cache/
+.next/
+out/
+
+# Cache de pacotes
+*.tsbuildinfo
+
+# IDEs/Editor
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Sistemas Operacionais
+.DS_Store
+Thumbs.db
+
+# Testes
+coverage/
+*.lcov
+
+# Relatórios de erro
+error.log
+*.pid
+*.seed
+*.pid.lock
+
+# Depuração
+*.log
+logs/
+debug.log
+.gitignore

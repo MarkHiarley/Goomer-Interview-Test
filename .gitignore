@@ -49,3 +49,4 @@ error.log
 logs/
 debug.log
 .gitignore
+node_modules/

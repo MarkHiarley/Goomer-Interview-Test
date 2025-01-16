@@ -45,4 +45,6 @@ router.delete('/:id', async (req: Request, res: Response) => {
         res.status(500).json("erro ao deletar" + error)
     }
 })
+
+
 export default router;

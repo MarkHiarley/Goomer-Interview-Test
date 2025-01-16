@@ -7,4 +7,5 @@ const router = Router();
 router.use('/restaurante', restaurantesRouter);
 router.use('/produto', produtosRouter);
 
+
 export default router;

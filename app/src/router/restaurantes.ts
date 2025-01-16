@@ -5,8 +5,8 @@ const router = Router();
 
 router.get('/', async (req: Request, res: Response) => {
     try {
-        const result = await pool.query('SELECT * FROM restaurantes');
-        res.json(result.rows);
+        const restaurantes = await pool.query('SELECT * FROM restaurantes');
+        res.json(restaurantes.rows);
     } catch (err) {
         console.error(err);
         res.status(500).send('Erro ao conectar ao banco de dados');

@@ -20,4 +20,29 @@ router.post('/', async (req: Request, res: Response) => {
         res.status(500).send('Erro ao adicionar produto');
     }
 });
+
+router.get('/', async (req: Request, res: Response) => {
+    try {
+        const Produtos = await pool.query('SELECT * FROM produtos')
+        if(Produtos === null){
+            return res.status(200).json('Não há produtos para buscar')
+        }
+        res.status(200).json(Produtos.rows)
+    }catch(error){
+        res.status(500).json("erro ao buscar" + error)
+    }
+})
+
+router.delete('/:id', async (req: Request, res: Response) => {
+    const id = parseInt(req.params.id)
+    if(!id){
+        return res.status(404).json('Id invalido ou inexistente')
+    }
+    try {
+        const produtoDelete = await pool.query('DELETE FROM produtos WHERE id = $1',[id])
+        res.status(200).json(`produto com id: ${id} deletado com sucesso` + produtoDelete)
+    }catch(error){
+        res.status(500).json("erro ao deletar" + error)
+    }
+})
 export default router;

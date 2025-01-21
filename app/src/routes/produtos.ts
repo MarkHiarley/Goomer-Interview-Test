@@ -52,9 +52,6 @@ router.put('/:id' , async (req: Request, res:Response)=> {
     const id = parseInt(req.params.id)
     const preco = parseFloat(req.body.preco)
     try{
-        if(!nome || !categoria || !restaurante_id || !preco || !foto){
-            return res.status(404).json("informe todo os valores")
-        }
         const produtoAtualizado = await pool.query(
             'UPDATE produtos SET restaurante_id= $1, nome = $2, foto = $3, preco = $4, categoria = $5 WHERE id = $6',
             [restaurante_id, nome, foto, preco, categoria, id ]

@@ -12,6 +12,27 @@
 
 ---
 
+### Estrutura do Projeto
+goomer/
+├── app/
+│   ├── server.ts            # Inicialização do servidor e configuração principal
+│   ├── src/
+│   │   ├── database/
+│   │   │   └── pgconnect.ts     # Conexão com o banco de dados PostgreSQL
+│   │   ├── routes/
+│   │   │   ├── index.ts         # Roteador principal
+│   │   │   ├── horarios.ts      # Rotas para gerenciamento de horários
+│   │   │   ├── produtos.ts      # Rotas para gerenciamento de produtos
+│   │   │   ├── promocoes.ts     # Rotas para gerenciamento de promoções
+│   │   │   └── restaurantes.ts  # Rotas para gerenciamento de restaurantes
+├── .env                     # Configurações de variáveis de ambiente
+├── tsconfig.json            # Configuração do TypeScript
+├── package.json             # Configurações de dependências do projeto
+├── README.md                # Documentação do projeto
+└── .gitignore               # Arquivos e pastas ignorados no Git
+
+---
+
 ### Pré-requisitos
 Certifique-se de ter instalado:
 - Node.js >= 16.x
@@ -153,7 +174,7 @@ npm run dev
 
 ## Melhorias Futuras
 
-- URGENTE: Melhorar qualidade de Requisicões, como a de atualizar pq so muda se tiver todos os dados do restaurante, nesse modo precisando fazer uma REQ de dados para a seguir mudar so 1.
+- URGENTE: Melhorar qualidade de Requisicões, como a de atualizar pq so muda se tiver todos os dados do restaurante, nesse modo precisando fazer uma REQ de dados para a seguir mudar so 1 ou atualizar de PUT para PATCH
 - Implementar autenticação e autorização, para seguranca e uma forma de privar algumas rotas de acordo com o nivel dos usuarios
 - Melhorar a validação de dados. acho que faria com "Zod"
 - Adicionar suporte a armazenamento de imagens (para fotos de restaurantes e produtos), mas acho que url embora demore carregar, é melhor do que armazenar o binario no banco de dados

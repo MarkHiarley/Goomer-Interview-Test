@@ -12,6 +12,27 @@
 
 ---
 
+### Estrutura do Projeto
+goomer/
+├── app/
+│   ├── server.ts            # Inicialização do servidor e configuração principal
+│   ├── src/
+│   │   ├── database/
+│   │   │   └── pgconnect.ts     # Conexão com o banco de dados PostgreSQL
+│   │   ├── routes/
+│   │   │   ├── index.ts         # Roteador principal
+│   │   │   ├── horarios.ts      # Rotas para gerenciamento de horários
+│   │   │   ├── produtos.ts      # Rotas para gerenciamento de produtos
+│   │   │   ├── promocoes.ts     # Rotas para gerenciamento de promoções
+│   │   │   └── restaurantes.ts  # Rotas para gerenciamento de restaurantes
+├── .env                     # Configurações de variáveis de ambiente
+├── tsconfig.json            # Configuração do TypeScript
+├── package.json             # Configurações de dependências do projeto
+├── README.md                # Documentação do projeto
+└── .gitignore               # Arquivos e pastas ignorados no Git
+
+---
+
 ### Pré-requisitos
 Certifique-se de ter instalado:
 - Node.js >= 16.x

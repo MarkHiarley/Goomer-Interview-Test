@@ -56,4 +56,6 @@ router.put('/:id', async (req: Request, res: Response) => {
         res.status(400).send("Erro ao atualizar restaurante");
     }
 });
+
+
 export default router;

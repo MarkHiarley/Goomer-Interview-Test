@@ -21,11 +21,14 @@ Certifique-se de ter instalado:
 Crie um arquivo `.env` na raiz do projeto com as seguintes configurações:
 
 ```env
-DATABASE_URL=postgresql://username:password@localhost:5432/goomer_listarango
-PORT=3000
+DB_USER=postgres
+DB_PASSWORD=root
+DB_HOST=localhost
+DB_PORT=5432
+DB_DATABASE=sistema_restaurantes
 ```
 
-Substitua `username`, `password` e `goomer_listarango` pelos dados do seu banco.
+Substitua `postgres`, `root` e `sistema_restaurantes` pelos dados do seu banco.
 
 ---
 
@@ -34,7 +37,6 @@ Substitua `username`, `password` e `goomer_listarango` pelos dados do seu banco.
 1. Clone o repositório:
    ```bash
    git clone <URL_DO_REPOSITORIO>
-   cd goomer-lista-rango
    ```
 
 2. Instale as dependências:
@@ -63,68 +65,70 @@ npm run dev
 
 ### **Restaurantes**
 1. **Listar todos os restaurantes**  
-   `GET /restaurants`
+   `GET api/restaurantes`
 
 2. **Cadastrar um novo restaurante**  
-   `POST /restaurants`  
+   `POST api/restaurantes`  
    **Body JSON**:
    ```json
    {
-     "name": "Restaurante Exemplo",
-     "address": "Rua Exemplo, 123",
-     "openingHours": "Segunda a Sexta: 09:00-18:00; Sábado e Domingo: 11:00-20:00"
-   }
+    "foto": "URL da Foto",
+    "nome":"Nome",
+    "endereco":"Endereço"
+   } 
    ```
 
 3. **Obter detalhes de um restaurante**  
-   `GET /restaurants/:id`
+   `GET /restaurantes/:id`
 
 4. **Atualizar um restaurante**  
-   `PUT /restaurants/:id`  
-   **Body JSON** (apenas os campos a serem atualizados):
+   `PUT api/restaurantes/:id`  
+   **Body JSON**
    ```json
    {
-     "name": "Novo Nome do Restaurante"
+     "foto": "URL da Foto",
+     "nome":"Novo Nome",
+     "endereco":"Endereço"
    }
    ```
 
 5. **Excluir um restaurante**  
-   `DELETE /restaurants/:id`
+   `DELETE /restaurantes/id`
 
 ---
 
 ### **Produtos**
 1. **Listar produtos de um restaurante**  
-   `GET /restaurants/:id/products`
+   `GET /api/produtos`
 
 2. **Cadastrar um novo produto**  
-   `POST /restaurants/:id/products`  
+   `POST /api/produtos`  
    **Body JSON**:
    ```json
-   {
-     "name": "Produto Exemplo",
-     "price": 15.99,
-     "category": "Bebidas",
-     "promotion": {
-       "description": "Chopp pela metade do preço",
-       "promoPrice": 7.99,
-       "days": ["Segunda", "Terça"],
-       "hours": "18:00-20:00"
-     }
+  {
+    "restaurante_id":"ID do Restaurante",
+    "foto":"URL da Foto",
+    "nome":"Nome",
+    "preco": "Preco",
+    "categoria":"EX:Doce"
    }
    ```
 
 3. **Atualizar um produto**  
    `PUT /restaurants/:id/products/:productId`  
-   **Body JSON** (apenas os campos a serem atualizados):
+   **Body JSON** 
    ```json
-   {
-     "price": 19.99
+  {
+    "restaurante_id":"ID do Restaurante",
+    "foto":"URL da Foto",
+    "nome":"Nome",
+    "preco": "Preco",
+    "categoria":"EX:Nova Categoria"
    }
    ```
 
 4. **Excluir um produto**  
-   `DELETE /restaurants/:id/products/:productId`
+   `DELETE /api/produto/id`
 
 ---
 
@@ -149,13 +153,12 @@ npm run dev
 
 ## Melhorias Futuras
 
-- Adicionar testes unitários com **Jest** ou outra biblioteca.
-- Implementar autenticação e autorização (ex.: JWT).
-- Melhorar a validação de dados.
-- Adicionar suporte a armazenamento de imagens (para fotos de restaurantes e produtos).
+- URGENTE: Melhorar qualidade de Requisicões, como a de atualizar pq so muda se tiver todos os dados do restaurante, nesse modo precisando fazer uma REQ de dados para a seguir mudar so 1.
+- Implementar autenticação e autorização, para seguranca e uma forma de privar algumas rotas de acordo com o nivel dos usuarios
+- Melhorar a validação de dados. acho que faria com "Zod"
+- Adicionar suporte a armazenamento de imagens (para fotos de restaurantes e produtos), mas acho que url embora demore carregar, é melhor do que armazenar o binario no banco de dados
 - Criar endpoints paginados para melhorar a performance em grandes listas.
 - Refatorar a estrutura para seguir mais estritamente os princípios do SOLID.
 
 ---
 
-Agora é só salvar esse conteúdo no arquivo **README.md** do seu projeto e subir no repositório. 😊

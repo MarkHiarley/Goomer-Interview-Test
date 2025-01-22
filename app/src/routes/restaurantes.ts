@@ -40,19 +40,45 @@ router.delete('/:id', async (req: Request, res: Response) => {
     }
 });
 
-router.put('/:id', async (req: Request, res: Response) => {
+router.patch('/:id', async (req: Request, res: Response) => {
     try {
-        if (!req.params.id) {
-            return res.status(400).send("Por favor, informe o ID do restaurante");
+        const id = parseInt(req.params.id)
+        const { foto, nome, endereco } = req.body
+        const camposDB = []
+        const ValoresCampo = []
+        if (!id) {
+            return res.status(404).json("informe um id valido")
         }
-        const id = parseInt(req.params.id);
-        const { foto, nome, endereco } = req.body;
-        await pool.query(
-            'UPDATE restaurantes SET foto = $1, nome = $2, endereco = $3 WHERE id = $4',
-            [foto, nome, endereco, id]
-        );
+        let query = "UPDATE restaurantes SET"
+        if (foto) {
+            camposDB.push("foto")
+            ValoresCampo.push(foto)
+        }
+        if (nome) {
+            camposDB.push("nome")
+            ValoresCampo.push(nome)
+        }
+
+        if (endereco) {
+            camposDB.push("endereco")
+            ValoresCampo.push(endereco)
+        }
+        if (camposDB.length === 0) {
+            return res.status(400).send("Nenhum campo para atualizar");
+        }
+        camposDB.forEach((campo, index) => {
+            query += `${" " + campo} = $${index + 1}`; 
+            if (index < camposDB.length - 1) {
+                query += ', '
+            }
+        })
+
+        query += ` WHERE id = $${camposDB.length + 1}` 
+        ValoresCampo.push(id)
+        await pool.query(query, ValoresCampo)
         res.status(200).json(`Restaurante ${id} atualizado com sucesso`);
     } catch (error) {
+        console.error('Erro ao atualizar restaurante:', error);
         res.status(400).send("Erro ao atualizar restaurante");
     }
 });

@@ -174,7 +174,7 @@ npm run dev
 
 ## Melhorias Futuras
 
-- URGENTE: Melhorar qualidade de Requisicões, como a de atualizar pq so muda se tiver todos os dados do restaurante, nesse modo precisando fazer uma REQ de dados para a seguir mudar so 1 ou atualizar de PUT para PATCH
+- URGENTE: Melhorar qualidade de Requisicões, como a de atualizar pq so muda se tiver todos os dados do restaurante, nesse modo precisando fazer uma REQ de dados para a seguir mudar so 1 ou atualizar de PUT para PATCH, como na rota 'restaurantes'.
 - Implementar autenticação e autorização, para seguranca e uma forma de privar algumas rotas de acordo com o nivel dos usuarios
 - Melhorar a validação de dados. acho que faria com "Zod"
 - Adicionar suporte a armazenamento de imagens (para fotos de restaurantes e produtos), mas acho que url embora demore carregar, é melhor do que armazenar o binario no banco de dados

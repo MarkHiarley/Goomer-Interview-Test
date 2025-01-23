@@ -58,7 +58,6 @@ router.patch('/:id', async (req: Request, res: Response) => {
             camposDB.push("nome")
             ValoresCampo.push(nome)
         }
-
         if (endereco) {
             camposDB.push("endereco")
             ValoresCampo.push(endereco)
@@ -72,7 +71,6 @@ router.patch('/:id', async (req: Request, res: Response) => {
                 query += ', '
             }
         })
-
         query += ` WHERE id = $${camposDB.length + 1}` 
         ValoresCampo.push(id)
         await pool.query(query, ValoresCampo)

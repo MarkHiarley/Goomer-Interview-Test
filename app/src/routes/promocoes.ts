@@ -89,10 +89,21 @@ router.patch('/:id', async (req: Request, res: Response) => {
         values.push(id)
         console.log(query)
         await pool.query(query, values);
-        res.status(200).json(`produto com o id:${id} atualizado`)
-        
+        res.status(200).json(`promoções com o id:${id} atualizado`)
+
     } catch (error) {
         res.status(500).json('erro ao fazer a REQ' + error)
+    }
+})
+
+router.delete('/:id', async (req: Request, res: Response) => {
+    try {
+        const id = parseInt(req.params.id)
+        await pool.query(`DELETE promocoes_produtos WHERE id = ${id}`)
+        res.status(200).json(`Promoção com o ID: ${id}, Deletada`)
+    } catch (error) {
+        res.status(500).json('erro em conexao com o servidor')
+        console.log(error)
     }
 })
 export default router;

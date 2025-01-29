@@ -51,48 +51,55 @@ router.patch('/:id', async (req: Request, res: Response) => {
     try {
         const { produto_id, descricao, preco_promocional, dia_da_semana, hora_inicio, hora_fim } = req.body
         const id = parseInt(req.params.id)
-        const values = [];
-        const fields = [];
+        if (isNaN(id)) {
+            return res.status(400).send("Por favor, informe um ID válido");
+        }
+
+        const values: any[] = [];
+        const fields: string[] = [];
         let query = 'UPDATE promocoes_produtos SET ';
 
-        if (descricao) {
-            values.push(descricao)
-            fields.push('descricao')
-        }
-        if (preco_promocional) {
-            values.push(preco_promocional)
-            fields.push('preco_promocional')
-        }
-        if (dia_da_semana) {
-            values.push(dia_da_semana)
-            fields.push('dia_da_semana')
-        }
-        if (hora_inicio) {
-            values.push(hora_inicio)
-            fields.push('hora_inicio')
-        }
-        if (hora_fim) {
-            values.push(hora_fim)
-            fields.push('hora_fim')
-        }
-        if (produto_id) {
-            values.push(produto_id)
-            fields.push('produto_id')
-        }
-        fields.forEach((campo, index) => {
-            query += `${campo} = $${index + 1}`;
-            if (index < fields.length - 1) {
-                query += ', ';
+        const ObjectData = { produto_id, descricao, preco_promocional, dia_da_semana, hora_inicio, hora_fim }
+        /*construo meu obejeto com as informacoes*/
+
+        Object.entries(ObjectData).forEach(([key, value]) => {
+            /*aqui eu uso o obeject entries para separa o meu objeto em pares tipo:
+            [
+                [produto_id, "valor que vem sa REQ"       
+            ]         
+            */
+            if (value !== undefined) {
+                /*eu faco a verificacao */
+                fields.push(`${key} = $${fields.length + 1}`);
+                /*envio os campos com as seguinte $mais o index deles tambem pra um array*/
+                values.push(value)
             }
         })
+
+        query += fields.join(', ')
+        /*aqui eu separo os campo com virgula */
         query += ` WHERE id = $${fields.length + 1}`
+        /*falo que o id é tamanho da lista mais um que reprensenta id, que logo em seguida eu envio o id para os valores */
         values.push(id)
-        console.log(query)
+
+
         await pool.query(query, values);
-        res.status(200).json(`produto com o id:${id} atualizado`)
-        
+        res.status(200).json(`promoções com o id:${id} atualizado`)
+        console.log("deu certo porra " + query + "," + values)
+
     } catch (error) {
         res.status(500).json('erro ao fazer a REQ' + error)
+    }
+})
+
+router.delete('/:id', async (req: Request, res: Response) => {
+    try {
+        const id = parseInt(req.params.id)
+        await pool.query(`DELETE promocoes_produtos WHERE id = ${id}`)
+        res.status(200).json(`Promoção com o ID: ${id}, Deletada`)
+    } catch (error) {
+        res.status(500).json('erro em conexao com o servidor')
+        console.log(error)
     }
 })
 export default router;

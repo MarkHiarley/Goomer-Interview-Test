@@ -15,7 +15,7 @@
   },
   "scripts": {
     "start": "node dist/server.js",
-    "dev": "nodemon --watch app/src --exec ts-node app/src/server.ts",
+    "dev": "nodemon --watch app/src --exec ts-node app/src/backend/server.ts",
     "build": "tsc --project tsconfig.json"
   }
 }

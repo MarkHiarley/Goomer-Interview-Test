@@ -198,12 +198,12 @@ Para configurar o banco de dados PostgreSQL com a estrutura das tabelas, siga os
    `POST /api/produtos`  
    **Body JSON**:
    ```json
-  {
-    "restaurante_id":"ID do Restaurante",
-    "foto":"URL da Foto",
-    "nome":"Nome",
-    "preco": "Preço",
-    "categoria":"EX:Doce"
+   {
+     "restaurante_id": "ID do Restaurante",
+     "foto": "URL da Foto",
+     "nome": "Nome",
+     "preco": "Preço",
+     "categoria": "EX:Doce"
    }
    ```
 
@@ -211,12 +211,12 @@ Para configurar o banco de dados PostgreSQL com a estrutura das tabelas, siga os
    `PUT /api/produtos/:id`  
    **Body JSON** 
    ```json
-  {
-    "restaurante_id":"ID do Restaurante",
-    "foto":"URL da Foto",
-    "nome":"Nome",
-    "preco": "Preço",
-    "categoria":"EX:Nova Categoria"
+   {
+     "restaurante_id": "ID do Restaurante",
+     "foto": "URL da Foto",
+     "nome": "Nome",
+     "preco": "Preço",
+     "categoria": "EX:Nova Categoria"
    }
    ```
 

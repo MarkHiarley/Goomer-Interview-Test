@@ -15,7 +15,7 @@ router.post('/', async (req: Request, res: Response) => {
         res.status(201).json(newProduto.rows[0]);
         console.log('Produto adicionado com sucesso' + newProduto.rows[0]);
 
-    } catch (erro : any) {
+    } catch (erro: any) {
         console.log(erro);
         res.status(500).send('Erro ao adicionar produto');
     }
@@ -24,41 +24,65 @@ router.post('/', async (req: Request, res: Response) => {
 router.get('/', async (req: Request, res: Response) => {
     try {
         const Produtos = await pool.query('SELECT * FROM produtos')
-        if(Produtos === null){
+        if (Produtos === null) {
             return res.status(200).json('Não há produtos para buscar')
         }
         res.status(200).json(Produtos.rows)
-    }catch(error: any){
+    } catch (error: any) {
         res.status(500).json("erro ao buscar" + error)
     }
 })
 
 router.delete('/:id', async (req: Request, res: Response) => {
     const id = parseInt(req.params.id)
-    if(!id){
+    if (!id) {
         return res.status(404).json('Id invalido ou inexistente')
     }
     try {
-        const produtoDelete = await pool.query('DELETE FROM produtos WHERE id = $1',[id])
+        const produtoDelete = await pool.query('DELETE FROM produtos WHERE id = $1', [id])
         res.status(200).json(`produto com id: ${id} deletado com sucesso` + produtoDelete)
-    }catch(error: any){
+    } catch (error: any) {
         res.status(500).json("erro ao deletar" + error)
     }
 })
 
-router.put('/:id' , async (req: Request, res:Response)=> {
-    const { nome, categoria, foto } = req.body
-    const restaurante_id = parseInt(req.body.restaurante_id)
-    const id = parseInt(req.params.id)
-    const preco = parseFloat(req.body.preco)
-    try{
-        const produtoAtualizado = await pool.query(
-            'UPDATE produtos SET restaurante_id= $1, nome = $2, foto = $3, preco = $4, categoria = $5 WHERE id = $6',
-            [restaurante_id, nome, foto, preco, categoria, id ]
-        );
-        res.status(201).json(`produto com o id:${id} atualizado com sucesso` + produtoAtualizado)
-    }catch(erro:any){
-        res.status(500).json(erro+"erro ao conectar o banco de dados ou api")
+router.patch('/:id', async (req: Request, res: Response) => {
+    try {
+        const id = parseInt(req.params.id)
+        const { nome, categoria, foto } = req.body
+
+        const restaurante_id = req.body.restaurante_id !== undefined ? req.body.restaurante_id : null;
+        const preco = req.body.preco !== undefined ? parseFloat(req.body.preco) : null;
+
+        const validPreco = preco !== null && !isNaN(preco) ? preco : null;
+        const validRestauranteId = restaurante_id !== null && !isNaN(restaurante_id) ? restaurante_id : null;
+
+
+        const ObjectData = {restaurante_id:validRestauranteId, nome, categoria, foto, preco:validPreco};
+        
+        let query = 'UPDATE produtos SET '
+        const values: any[] = [];
+        const fields: string[] = [];
+
+       
+        
+
+        Object.entries(ObjectData).forEach(([key, value])=>{
+            if(value !== undefined && value !== null ){
+                fields.push(`${key} = $${fields.length + 1}`)
+                values.push(value)
+            }
+        })
+         query += fields.join(', ')
+         query +=  ` WHERE id = $${fields.length + 1}`
+         values.push(id)
+
+         console.log(query, values)
+
+         await pool.query(query, values)
+        res.status(201).json(`produto com o id:${id} atualizado com sucesso`)
+    } catch (erro: any) {
+        res.status(500).json(erro + "erro ao conectar o banco de dados ou api")
         console.log(erro)
     }
 })

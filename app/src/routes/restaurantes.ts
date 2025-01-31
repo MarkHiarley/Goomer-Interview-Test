@@ -44,36 +44,24 @@ router.patch('/:id', async (req: Request, res: Response) => {
     try {
         const id = parseInt(req.params.id)
         const { foto, nome, endereco } = req.body
-        const camposDB = []
-        const ValoresCampo = []
-        if (!id) {
-            return res.status(404).json("informe um id valido")
-        }
-        let query = "UPDATE restaurantes SET"
-        if (foto) {
-            camposDB.push("foto")
-            ValoresCampo.push(foto)
-        }
-        if (nome) {
-            camposDB.push("nome")
-            ValoresCampo.push(nome)
-        }
-        if (endereco) {
-            camposDB.push("endereco")
-            ValoresCampo.push(endereco)
-        }
-        if (camposDB.length === 0) {
-            return res.status(400).send("Nenhum campo para atualizar");
-        }
-        camposDB.forEach((campo, index) => {
-            query += `${" " + campo} = $${index + 1}`; 
-            if (index < camposDB.length - 1) {
-                query += ', '
+        const values: any[] = [];
+        const fields: string[] = [];
+
+        let query = "UPDATE restaurantes SET "
+
+        const ObjectData = { foto, nome, endereco }
+
+        Object.entries(ObjectData).forEach(([key, value]) => {
+            if (value !== undefined && value !== null) {
+                fields.push(`${key} = $${fields.length + 1}`)
+                values.push(value)
             }
         })
-        query += ` WHERE id = $${camposDB.length + 1}` 
-        ValoresCampo.push(id)
-        await pool.query(query, ValoresCampo)
+        query += fields.join(', ')
+        query += ` WHERE id = $${fields.length + 1}`
+        values.push(id)
+        console.log(query)
+        await pool.query(query, values)
         res.status(200).json(`Restaurante ${id} atualizado com sucesso`);
     } catch (error) {
         console.error('Erro ao atualizar restaurante:', error);

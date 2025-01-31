@@ -1,5 +1,3 @@
-
-
 # Goomer Lista Rango - Backend Challenge
 
 ## Tecnologias Utilizadas
@@ -82,6 +80,80 @@ npm run dev
 
 ---
 
+### Configuração do Banco de Dados
+
+Para configurar o banco de dados PostgreSQL com a estrutura das tabelas, siga os passos abaixo:
+
+1. Acesse o PostgreSQL com o comando:
+   ```bash
+   psql -U postgres
+   ```
+
+2. Crie o banco de dados:
+   ```sql
+   CREATE DATABASE sistema_restaurantes;
+   ```
+
+3. Conecte-se ao banco de dados criado:
+   ```bash
+   \c sistema_restaurantes
+   ```
+
+4. Crie a tabela `restaurantes`:
+   ```sql
+   CREATE TABLE restaurantes (
+       id SERIAL PRIMARY KEY,
+       foto TEXT NOT NULL,
+       nome VARCHAR(255) NOT NULL,
+       endereco VARCHAR(255) NOT NULL
+   );
+   ```
+
+5. Crie a tabela `horarios_restaurante`:
+   ```sql
+   CREATE TABLE horarios_restaurante (
+       id SERIAL PRIMARY KEY,
+       restaurante_id INTEGER NOT NULL,
+       dia_da_semana VARCHAR(50) NOT NULL,
+       hora_inicio TIME NOT NULL,
+       hora_fim TIME NOT NULL,
+       CONSTRAINT horarios_restaurante_check CHECK (hora_inicio <= hora_fim),
+       CONSTRAINT horarios_restaurante_restaurante_id_fkey FOREIGN KEY (restaurante_id) REFERENCES restaurantes(id) ON DELETE CASCADE
+   );
+   ```
+
+6. Crie a tabela `produtos`:
+   ```sql
+   CREATE TABLE produtos (
+       id SERIAL PRIMARY KEY,
+       restaurante_id INTEGER NOT NULL,
+       foto TEXT NOT NULL,
+       nome VARCHAR(255) NOT NULL,
+       preco NUMERIC(10,2) NOT NULL,
+       categoria VARCHAR(50) NOT NULL,
+       CONSTRAINT produtos_restaurante_id_fkey FOREIGN KEY (restaurante_id) REFERENCES restaurantes(id) ON DELETE CASCADE
+   );
+   ```
+
+7. Crie a tabela `promocoes_produtos`:
+   ```sql
+   CREATE TABLE promocoes_produtos (
+       id SERIAL PRIMARY KEY,
+       produto_id INTEGER NOT NULL,
+       descricao TEXT NOT NULL,
+       preco_promocional NUMERIC(10,2) NOT NULL,
+       dia_da_semana VARCHAR(50) NOT NULL,
+       hora_inicio TIME NOT NULL,
+       hora_fim TIME NOT NULL,
+       CONSTRAINT promocoes_produtos_check CHECK (hora_inicio <= hora_fim),
+       CONSTRAINT promocoes_produtos_hora_fim_check CHECK ((EXTRACT(minute FROM hora_fim)::integer % 15) = 0),
+       CONSTRAINT promocoes_produtos_hora_inicio_check CHECK ((EXTRACT(minute FROM hora_inicio)::integer % 15) = 0),
+       CONSTRAINT promocoes_produtos_produto_id_fkey FOREIGN KEY (produto_id) REFERENCES produtos(id) ON DELETE CASCADE
+   );
+   ```
+
+---
+
 ## Endpoints da API
 
 ### **Restaurantes**
@@ -100,7 +172,7 @@ npm run dev
    ```
 
 3. **Obter detalhes de um restaurante**  
-   `GET /restaurantes/:id`
+   `GET /api/restaurantes/:id`
 
 4. **Atualizar um restaurante**  
    `PUT api/restaurantes/:id`  
@@ -114,7 +186,7 @@ npm run dev
    ```
 
 5. **Excluir um restaurante**  
-   `DELETE /restaurantes/id`
+   `DELETE /api/restaurantes/:id`
 
 ---
 
@@ -130,26 +202,26 @@ npm run dev
     "restaurante_id":"ID do Restaurante",
     "foto":"URL da Foto",
     "nome":"Nome",
-    "preco": "Preco",
+    "preco": "Preço",
     "categoria":"EX:Doce"
    }
    ```
 
 3. **Atualizar um produto**  
-   `PUT /restaurants/:id/products/:productId`  
+   `PUT /api/produtos/:id`  
    **Body JSON** 
    ```json
   {
     "restaurante_id":"ID do Restaurante",
     "foto":"URL da Foto",
     "nome":"Nome",
-    "preco": "Preco",
+    "preco": "Preço",
     "categoria":"EX:Nova Categoria"
    }
    ```
 
 4. **Excluir um produto**  
-   `DELETE /api/produto/id`
+   `DELETE /api/produtos/:id`
 
 ---
 
@@ -174,10 +246,10 @@ npm run dev
 
 ## Melhorias Futuras
 
-- URGENTE: Melhorar qualidade de Requisicões, como a de atualizar pq so muda se tiver todos os dados do restaurante, nesse modo precisando fazer uma REQ de dados para a seguir mudar so 1 ou atualizar de PUT para PATCH, como na rota 'restaurantes'.
-- Implementar autenticação e autorização, para seguranca e uma forma de privar algumas rotas de acordo com o nivel dos usuarios
-- Melhorar a validação de dados. acho que faria com "Zod"
-- Adicionar suporte a armazenamento de imagens (para fotos de restaurantes e produtos), mas acho que url embora demore carregar, é melhor do que armazenar o binario no banco de dados
+- URGENTE: Melhorar a qualidade das requisições, como a de atualizar, pois só muda se tiver todos os dados do restaurante. Nesse modo, é necessário fazer uma requisição de dados para, em seguida, mudar apenas um ou atualizar de PUT para PATCH, como na rota 'restaurantes'.
+- Implementar autenticação e autorização, para segurança e uma forma de privar algumas rotas de acordo com o nível dos usuários.
+- Melhorar a validação de dados. Acho que faria com "Zod".
+- Adicionar suporte a armazenamento de imagens (para fotos de restaurantes e produtos), mas acho que URL, embora demore carregar, é melhor do que armazenar o binário no banco de dados.
 - Criar endpoints paginados para melhorar a performance em grandes listas.
 - Refatorar a estrutura para seguir mais estritamente os princípios do SOLID.
 

@@ -158,30 +158,30 @@ Para configurar o banco de dados PostgreSQL com a estrutura das tabelas, siga os
 
 ### **Restaurantes**
 1. **Listar todos os restaurantes**  
-   `GET api/restaurantes`
+   `GET /api/restaurantes`
 
 2. **Cadastrar um novo restaurante**  
-   `POST api/restaurantes`  
+   `POST /api/restaurantes`  
    **Body JSON**:
    ```json
    {
-    "foto": "URL da Foto",
-    "nome":"Nome",
-    "endereco":"Endereço"
-   } 
+     "foto": "URL da Foto",
+     "nome": "Nome",
+     "endereco": "Endereço"
+   }
    ```
 
 3. **Obter detalhes de um restaurante**  
    `GET /api/restaurantes/:id`
 
 4. **Atualizar um restaurante**  
-   `PUT api/restaurantes/:id`  
-   **Body JSON**
+   `PUT /api/restaurantes/:id`  
+   **Body JSON**:
    ```json
    {
      "foto": "URL da Foto",
-     "nome":"Novo Nome",
-     "endereco":"Endereço"
+     "nome": "Novo Nome",
+     "endereco": "Endereço"
    }
    ```
 
@@ -198,30 +198,73 @@ Para configurar o banco de dados PostgreSQL com a estrutura das tabelas, siga os
    `POST /api/produtos`  
    **Body JSON**:
    ```json
-  {
-    "restaurante_id":"ID do Restaurante",
-    "foto":"URL da Foto",
-    "nome":"Nome",
-    "preco": "Preço",
-    "categoria":"EX:Doce"
+   {
+     "restaurante_id": "ID do Restaurante",
+     "foto": "URL da Foto",
+     "nome": "Nome",
+     "preco": "Preço",
+     "categoria": "EX:Doce"
    }
    ```
 
-3. **Atualizar um produto**  
+3. **Obter detalhes de um produto**  
+   `GET /api/produtos/:id`
+
+4. **Atualizar um produto**  
    `PUT /api/produtos/:id`  
-   **Body JSON** 
+   **Body JSON**:
    ```json
-  {
-    "restaurante_id":"ID do Restaurante",
-    "foto":"URL da Foto",
-    "nome":"Nome",
-    "preco": "Preço",
-    "categoria":"EX:Nova Categoria"
+   {
+     "restaurante_id": "ID do Restaurante",
+     "foto": "URL da Foto",
+     "nome": "Nome",
+     "preco": "Preço",
+     "categoria": "EX:Nova Categoria"
    }
    ```
 
-4. **Excluir um produto**  
+5. **Excluir um produto**  
    `DELETE /api/produtos/:id`
+
+---
+
+### **Promoções**
+1. **Listar todas as promoções**  
+   `GET /api/promocoes`
+
+2. **Cadastrar uma nova promoção**  
+   `POST /api/promocoes`  
+   **Body JSON**:
+   ```json
+   {
+     "produto_id": "ID do Produto",
+     "descricao": "Descrição",
+     "preco_promocional": "Preço Promocional",
+     "dia_da_semana": "Dia da Semana",
+     "hora_inicio": "Hora de Início",
+     "hora_fim": "Hora de Fim"
+   }
+   ```
+
+3. **Obter detalhes de uma promoção**  
+   `GET /api/promocoes/:id`
+
+4. **Atualizar uma promoção**  
+   `PUT /api/promocoes/:id`  
+   **Body JSON**:
+   ```json
+   {
+     "produto_id": "ID do Produto",
+     "descricao": "Descrição",
+     "preco_promocional": "Preço Promocional",
+     "dia_da_semana": "Dia da Semana",
+     "hora_inicio": "Hora de Início",
+     "hora_fim": "Hora de Fim"
+   }
+   ```
+
+5. **Excluir uma promoção**  
+   `DELETE /api/promocoes/:id`
 
 ---
 

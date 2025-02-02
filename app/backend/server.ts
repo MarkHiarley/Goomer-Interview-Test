@@ -1,7 +1,6 @@
 import express from 'express';
 import router from '../backend/routes/index';
 
-
 const app = express();
 app.use(express.json());
 

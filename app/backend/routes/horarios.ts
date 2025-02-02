@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import pool from '../database/pgconnect';
+import pool from '../database/db';
 
 const router = Router();
 

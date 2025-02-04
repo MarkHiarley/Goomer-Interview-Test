@@ -1,5 +1,6 @@
 import { Router, Request, Response } from 'express';
 import pool from '../database/db';
+import verifyToken from '../middleware/verify.token';
 
 const router = Router();
 
@@ -11,7 +12,7 @@ const router = Router();
 //hora_inicio
 //hora_fim
 
-router.post('/', async (req: Request, res: Response) => {
+router.post('/', verifyToken, async (req: Request, res: Response) => {
     try {
         const { produto_id, descricao, preco_promocional, dia_da_semana, hora_inicio, hora_fim } = req.body;
 
@@ -27,7 +28,7 @@ router.post('/', async (req: Request, res: Response) => {
     }
 })
 
-router.get('/', async (req: Request, res: Response) => {
+router.get('/', verifyToken, async (req: Request, res: Response) => {
     try {
         const promocoes_produtos = await pool.query('SELECT * FROM promocoes_produtos;')
         res.status(200).json(promocoes_produtos.rows)
@@ -36,18 +37,9 @@ router.get('/', async (req: Request, res: Response) => {
         console.log(error)
     }
 })
-router.delete('/:id', async (req: Request, res: Response) => {
-    const id = req.params.id
-    try {
-        await pool.query(`DELETE FROM promocoes_produtos WHERE id = ${parseInt(id)}`)
-        res.status(200).json(`promocao com o id = ${id} deletado`)
-    } catch (error) {
-        res.status(500).json("erro ao conectar ao banco de dados" + error)
-        console.log(error)
-    }
-})
 
-router.patch('/:id', async (req: Request, res: Response) => {
+
+router.patch('/:id', verifyToken, async (req: Request, res: Response) => {
     try {
         const { produto_id, descricao, preco_promocional, dia_da_semana, hora_inicio, hora_fim } = req.body
         const id = parseInt(req.params.id)
@@ -92,7 +84,7 @@ router.patch('/:id', async (req: Request, res: Response) => {
     }
 })
 
-router.delete('/:id', async (req: Request, res: Response) => {
+router.delete('/:id', verifyToken, async (req: Request, res: Response) => {
     try {
         const id = parseInt(req.params.id)
         await pool.query(`DELETE promocoes_produtos WHERE id = ${id}`)

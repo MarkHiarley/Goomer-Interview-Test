@@ -1,9 +1,10 @@
 import { Router, Request, Response } from 'express';
 import pool from '../database/db';
+import verifyToken from '../middleware/verify.token';
 
 const router = Router();
 
-router.post('/', async (req: Request, res: Response) => {
+router.post('/', verifyToken, async (req: Request, res: Response) => {
     const { nome, categoria, preco, restaurante_id, foto } = req.body;
     try {
 
@@ -21,7 +22,7 @@ router.post('/', async (req: Request, res: Response) => {
     }
 });
 
-router.get('/', async (req: Request, res: Response) => {
+router.get('/', verifyToken, async (req: Request, res: Response) => {
     try {
         const Produtos = await pool.query('SELECT * FROM produtos')
         if (Produtos === null) {
@@ -33,7 +34,7 @@ router.get('/', async (req: Request, res: Response) => {
     }
 })
 
-router.delete('/:id', async (req: Request, res: Response) => {
+router.delete('/:id', verifyToken, async (req: Request, res: Response) => {
     const id = parseInt(req.params.id)
     if (!id) {
         return res.status(404).json('Id invalido ou inexistente')
@@ -46,7 +47,7 @@ router.delete('/:id', async (req: Request, res: Response) => {
     }
 })
 
-router.patch('/:id', async (req: Request, res: Response) => {
+router.patch('/:id', verifyToken, async (req: Request, res: Response) => {
     try {
         const id = parseInt(req.params.id)
         const { nome, categoria, foto } = req.body
@@ -58,28 +59,28 @@ router.patch('/:id', async (req: Request, res: Response) => {
         const validRestauranteId = restaurante_id !== null && !isNaN(restaurante_id) ? restaurante_id : null;
 
 
-        const ObjectData = {restaurante_id:validRestauranteId, nome, categoria, foto, preco:validPreco};
-        
+        const ObjectData = { restaurante_id: validRestauranteId, nome, categoria, foto, preco: validPreco };
+
         let query = 'UPDATE produtos SET '
         const values: any[] = [];
         const fields: string[] = [];
 
-       
-        
 
-        Object.entries(ObjectData).forEach(([key, value])=>{
-            if(value !== undefined && value !== null ){
+
+
+        Object.entries(ObjectData).forEach(([key, value]) => {
+            if (value !== undefined && value !== null) {
                 fields.push(`${key} = $${fields.length + 1}`)
                 values.push(value)
             }
         })
-         query += fields.join(', ')
-         query +=  ` WHERE id = $${fields.length + 1}`
-         values.push(id)
+        query += fields.join(', ')
+        query += ` WHERE id = $${fields.length + 1}`
+        values.push(id)
 
-         console.log(query, values)
+        console.log(query, values)
 
-         await pool.query(query, values)
+        await pool.query(query, values)
         res.status(201).json(`produto com o id:${id} atualizado com sucesso`)
     } catch (erro: any) {
         res.status(500).json(erro + "erro ao conectar o banco de dados ou api")

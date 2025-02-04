@@ -1,9 +1,10 @@
 import { Router, Request, Response } from 'express';
 import pool from '../database/db';
+import verifyToken from '../middleware/verify.token';
 
 const router = Router();
 
-router.get('/', async (req: Request, res: Response) => {
+router.get('/', verifyToken, async (req: Request, res: Response) => {
     try {
         const horarios = pool.query('SELECT * FROM horarios_restaurante')
         res.status(200).json((await horarios).rows[0])
@@ -12,7 +13,7 @@ router.get('/', async (req: Request, res: Response) => {
     }
 })
 
-router.post('/', async (req: Request, res: Response) => {
+router.post('/', verifyToken, async (req: Request, res: Response) => {
     try {
         const { dia_da_semana, hora_inicio, hora_fim, restaurante_id } = req.body
         if (!restaurante_id || !dia_da_semana || !hora_inicio || !hora_fim) {
@@ -34,7 +35,7 @@ router.post('/', async (req: Request, res: Response) => {
     }
 });
 
-router.delete('/:id', async (req: Request, res: Response) => {
+router.delete('/:id', verifyToken, async (req: Request, res: Response) => {
     try {
         const id = req.params.id
         if (!id) {
@@ -48,7 +49,7 @@ router.delete('/:id', async (req: Request, res: Response) => {
     }
 })
 
-router.patch('/:id', async (req: Request, res: Response) => {
+router.patch('/:id', verifyToken, async (req: Request, res: Response) => {
     try {
         const { dia_da_semana, hora_inicio, hora_fim, restaurante_id } = req.body
         const id = req.params.id

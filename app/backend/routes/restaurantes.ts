@@ -1,9 +1,9 @@
 import { Router, Request, Response } from 'express';
 import pool from '../database/db';
-
+import verifyToken from '../middleware/verify.token';
 const router = Router();
 
-router.get('/', async (req: Request, res: Response) => {
+router.get('/', verifyToken, async (req: Request, res: Response) => {
     try {
         const restaurantes = await pool.query('SELECT * FROM restaurantes');
         res.json(restaurantes.rows);
@@ -13,7 +13,7 @@ router.get('/', async (req: Request, res: Response) => {
     }
 });
 
-router.post('/', async (req: Request, res: Response) => {
+router.post('/', verifyToken, async (req: Request, res: Response) => {
     const { foto, nome, endereco } = req.body;
     try {
         const newRestaurante = await pool.query(
@@ -27,7 +27,7 @@ router.post('/', async (req: Request, res: Response) => {
     }
 });
 
-router.delete('/:id', async (req: Request, res: Response) => {
+router.delete('/:id', verifyToken, async (req: Request, res: Response) => {
     try {
         if (!req.params.id) {
             return res.status(400).send("Por favor, informe o ID do restaurante");
@@ -40,7 +40,7 @@ router.delete('/:id', async (req: Request, res: Response) => {
     }
 });
 
-router.patch('/:id', async (req: Request, res: Response) => {
+router.patch('/:id', verifyToken, async (req: Request, res: Response) => {
     try {
         const id = parseInt(req.params.id)
         const { foto, nome, endereco } = req.body

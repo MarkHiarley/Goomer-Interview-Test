@@ -3,7 +3,7 @@ const secretKey = process.env.SECRET_KEY
 import { Request, Response, NextFunction } from 'express';
 
 
-export async function verifyToken(req: Request, res: Response, next: NextFunction) {
+export async function verifyAccessToken(req: Request, res: Response, next: NextFunction) {
     try {
         if (!secretKey) {
             throw new Error('SECRET_KEY não está definida nas variáveis de ambiente');
@@ -25,4 +25,4 @@ export async function verifyToken(req: Request, res: Response, next: NextFunctio
 }
 
 
-export default verifyToken;
+export default verifyAccessToken;

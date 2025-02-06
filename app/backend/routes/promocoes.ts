@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import pool from '../database/db';
-import verifyToken from '../middleware/verify.token';
+import verifyToken from '../middleware/verify.AccessToken';
 
 const router = Router();
 

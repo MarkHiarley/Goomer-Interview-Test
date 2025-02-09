@@ -1,8 +1,8 @@
 import { Router, Request, Response } from 'express';
 const router = Router();
 import bcrypt from 'bcryptjs';
-import createAccessToken from '../middleware/create.AccessToken';
-import refreshToken from '../middleware/create.RefreshToken';
+import createAccessToken from '../token/create.AccessToken';
+import refreshToken from '../token/create.RefreshToken';
 
 router.post('/', async (req: Request, res: Response) => {
     const { gmail, password } = req.body
@@ -17,22 +17,24 @@ router.post('/', async (req: Request, res: Response) => {
         if (!passwordValid) {
             res.status(401).json({ message: 'Senha ou gmail inválidos' });
         }
-        
+
         const token = createAccessToken(user.gmail, user.password)
         const refreshTokenCookies = refreshToken(user.gmail, user.password)
-        
-            //preciso mandar pro front e ele guardar nos cookies
-
-            //???
-
-        res.cookie('cookieNAME',
-             createAccessToken,
-              {httpOnly:true, 
-                secure:true
+        res.cookie('cookieTest',
+            token,
+            {
+                httpOnly: true,
+                secure: false
             })
+        res.cookie('cookieRefresh',
+            refreshTokenCookies,
+            {
+                httpOnly: true,
+                secure: false
+            })
+            
+        res.status(200).json('Login feito com sucesso')
 
-        res.status(200).json({ token })
-        
     } catch (error) {
         console.error('Erro ao fazer login:', error);
         res.status(500).json({ message: 'Erro interno do servidor' });

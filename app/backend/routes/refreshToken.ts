@@ -1,7 +1,7 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
-import createToken from '../middleware/create.AccessToken';
+import createToken from '../token/create.AccessToken';
 import cookiesParser from 'cookie-parser';
 
 const router = express.Router();
@@ -9,9 +9,11 @@ const secretKeyRefresh = process.env.SECRET_KEY_REFRESH;
 router.use(cookiesParser())
 router.post('/',(req:Request, res:Response)=>{
     try {
-        const refreshToken = req.cookies.cookieNAME
+        const refreshToken = req.cookies.cookieRefresh
+        console.log(refreshToken)
+        console.log(typeof(refreshToken))
 
-        if(!refreshToken){
+        if(!refreshToken){  
             return res.status(404).json("Refresh token nao foi encontrado")
         }
         if (!secretKeyRefresh) {

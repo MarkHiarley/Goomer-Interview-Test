@@ -4,16 +4,21 @@ import verifyToken from '../token/verify.AccessToken';
 
 const router = Router();
 
-router.get('/', verifyToken, async (req: Request, res: Response) => {
+
+router.get('/:id', async (req: Request, res: Response) => {
     try {
-        const horarios = pool.query('SELECT * FROM horarios_restaurante')
-        res.status(200).json((await horarios).rows[0])
+        const id = req.params.id
+        if (!id) {
+            return res.status(404).json('Informe um id valido')
+        }
+        const horarios = await pool.query(`SELECT * FROM horarios_restaurante WHERE restaurante_id = ${id}`)
+        res.status(201).json(horarios.rows[0]);
     } catch (error) {
         res.status(500).json("erro ao buscar horarios" + error)
     }
 })
 
-router.post('/', verifyToken, async (req: Request, res: Response) => {
+router.post('/',  async (req: Request, res: Response) => {
     try {
         const { dia_da_semana, hora_inicio, hora_fim, restaurante_id } = req.body
         if (!restaurante_id || !dia_da_semana || !hora_inicio || !hora_fim) {

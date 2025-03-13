@@ -3,7 +3,7 @@ import pool from '../database/db';
 import verifyToken from '../token/verify.AccessToken';
 const router = Router();
 
-router.get('/', verifyToken, async (req: Request, res: Response) => {
+router.get('/',verifyToken, async (req: Request, res: Response) => {
     try {
         const restaurantes = await pool.query('SELECT * FROM restaurantes');
         res.json(restaurantes.rows);

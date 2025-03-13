@@ -14,14 +14,14 @@ router.post('/', async (req: Request, res: Response) => {
 
         const passwordValid = await bcrypt.compare(password, user.password)
 
-        if (!passwordValid) {
-            res.status(401).json({ message: 'Senha ou gmail inválidos' });
+        if (passwordValid === false) {
+           return res.status(401).json({ message: 'Senha ou gmail inválidos' });
         }
-
+        
         const token = createAccessToken(user.gmail, user.password)
         const refreshTokenCookies = refreshToken(user.gmail, user.password)
         res.cookie('cookieTest',
-            token,
+            token,  
             {
                 httpOnly: true,
                 secure: false
